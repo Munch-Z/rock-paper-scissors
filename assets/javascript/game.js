@@ -94,7 +94,7 @@ function checkPicks() {
     const alertZone = document.getElementById('alertZone');
     console.log('Picks function fired')
 
-    myConnectionsRef.once('value').then((snap) => {
+    myConnectionsRef.once('value', (snap) => {
         let p1Pick = snap.child('playerOne').child('choice').val();
         let p2Pick = snap.child('playerTwo').child('choice').val();
         let p1Wins = snap.child('playerOne').child('wins').val();
