@@ -39,18 +39,19 @@ connectedRef.on('value', (snap) => {
                 con.set({
                     name: name,
                     choice: "",
+                    message: "",
                     wins: 0,
                     losses: 0,
                     ties: 0,
                 });
                 host = true;
             } else {
-
                 const con = myConnectionsRef.child('playerTwo');
                 con.onDisconnect().remove();
                 con.set({
                     name: name,
                     choice: "",
+                    message: "",
                     wins: 0,
                     losses: 0,
                 });
@@ -78,11 +79,6 @@ selectionsDiv.addEventListener('click', (e) => {
 function checkPicks() {
 
     myConnectionsRef.once('value').then((snap) => {
-
-        //html stuff
-
-
-        //get values from DB
         let p1Pick = snap.child('playerOne').child('choice').val();
         let p2Pick = snap.child('playerTwo').child('choice').val();
         let p1Wins = snap.child('playerOne').child('wins').val();
@@ -158,8 +154,10 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
     const alertZone = document.getElementById('alertZone');
 
     player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
-    if (p2Wins > 0) {
+
+    if (p2Wins !== null) {
         alertZone.textContent = 'Player 2 Won!'
+        player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
     }
 
 })
@@ -167,7 +165,7 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
 myConnectionsRef.child('playerTwo').child('losses').on('value', (snap) => {
     const player2LossesDiv = document.getElementById('player2Wins');
     let p2Losses = snap.val()
-    player2LossesDiv.textContent = 'Player 2 Wins: ' + p2Losses;
+    player2LossesDiv.textContent = 'Player 2 Losses: ' + p2Losses;
 })
 
 myConnectionsRef.child('playerTwo').child('choice').on('value', (snap) => {
@@ -189,4 +187,44 @@ myConnectionsRef.child('playerOne').child('ties').on('value', (snap) => {
     if (ties > 0) {
         alertZone.textContent = 'It\'s a tie!';
     }
+})
+
+const chatLog = database.ref('chatLog');
+
+const sendBtn = document.getElementById('sendMessage');
+const messageBox = document.getElementById('message');
+const chatBox = document.getElementById('chat');
+
+sendBtn.addEventListener('click', () => {
+    let message = messageBox.value;
+    if (host) {
+        myConnectionsRef.child('playerOne').child('message').set(message);
+    } else {
+        myConnectionsRef.child('playerTwo').child('message').set(message);
+    }
+
+    messageBox.value = '';
+})
+
+myConnectionsRef.child('playerOne').on('value', (snap) => {
+    let newPara = document.createElement('p');
+    let messageDB = snap.child('message').val();
+    let name = snap.child('name').val();
+    
+    if (messageDB) {
+        newPara.textContent = `${name} says: ${messageDB}`;
+    }
+    chatBox.appendChild(newPara);
+})
+
+myConnectionsRef.child('playerTwo').on('value', (snap) => {
+    let newPara = document.createElement('p');
+    let messageDB = snap.child('message').val();
+    let name = snap.child('name').val();
+
+    if (messageDB) {
+        newPara.textContent = `${name} says: ${messageDB}`;
+    }
+
+    chatBox.appendChild(newPara);
 })
