@@ -60,6 +60,7 @@ connectedRef.on('value', (snap) => {
                 }
             } else {
                 player = false;
+                alert('The game is full, you can watch, but not play.')
 
             }
 
