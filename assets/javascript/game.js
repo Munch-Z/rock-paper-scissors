@@ -11,8 +11,6 @@ const firebaseConfig = {
 }
 
 
-
-
 //DOM Stuff
 
 const selectionsDiv = document.getElementById('selections');
@@ -28,39 +26,49 @@ const myConnectionsRef = database.ref('connectedUsers');
 const connectedRef = database.ref('.info/connected');
 
 let host = false;
+let player = true;
+
 
 connectedRef.on('value', (snap) => {
     if (snap.val() === true) {
 
         myConnectionsRef.once('value').then((snap) => {
-            if (!snap.child('playerOne').exists()) {
-                const con = myConnectionsRef.child('playerOne');
-                con.onDisconnect().remove();
-                con.set({
-                    name: name,
-                    choice: "",
-                    message: "",
-                    wins: 0,
-                    losses: 0,
-                    ties: 0,
-                });
-                host = true;
+            if (snap.numChildren() < 2) {
+
+                if (!snap.child('playerOne').exists()) {
+                    const con = myConnectionsRef.child('playerOne');
+                    con.onDisconnect().remove();
+                    con.set({
+                        name: name,
+                        choice: "",
+                        message: "",
+                        wins: 0,
+                        losses: 0,
+                        ties: 0,
+                    });
+                    host = true;
+                } else {
+                    const con = myConnectionsRef.child('playerTwo');
+                    con.onDisconnect().remove();
+                    con.set({
+                        name: name,
+                        choice: "",
+                        message: "",
+                        wins: 0,
+                        losses: 0,
+                    });
+                }
             } else {
-                const con = myConnectionsRef.child('playerTwo');
-                con.onDisconnect().remove();
-                con.set({
-                    name: name,
-                    choice: "",
-                    message: "",
-                    wins: 0,
-                    losses: 0,
-                });
+                player = false;
+
             }
+
         })
     }
 })
 
 selectionsDiv.addEventListener('click', (e) => {
+  if (player) {  
     const playerPicked = e.target.id;
 
     myConnectionsRef.once('value').then((snap) => {
@@ -74,6 +82,7 @@ selectionsDiv.addEventListener('click', (e) => {
             checkPicks();
         }
     });
+} 
 })
 
 function checkPicks() {
@@ -155,7 +164,7 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
 
     player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
 
-    if (p2Wins !== null) {
+    if (p2Wins) {
         alertZone.textContent = 'Player 2 Won!'
         player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
     }
@@ -196,6 +205,9 @@ const messageBox = document.getElementById('message');
 const chatBox = document.getElementById('chat');
 
 sendBtn.addEventListener('click', () => {
+ if (player) {
+
+    
     let message = messageBox.value;
     if (host) {
         myConnectionsRef.child('playerOne').child('message').set(message);
@@ -204,13 +216,14 @@ sendBtn.addEventListener('click', () => {
     }
 
     messageBox.value = '';
+}
 })
 
 myConnectionsRef.child('playerOne').on('value', (snap) => {
     let newPara = document.createElement('p');
     let messageDB = snap.child('message').val();
     let name = snap.child('name').val();
-    
+
     if (messageDB) {
         newPara.textContent = `${name} says: ${messageDB}`;
     }
