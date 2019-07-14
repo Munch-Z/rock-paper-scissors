@@ -163,7 +163,7 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
     const player2WinsDiv = document.getElementById('player2Wins');
     const alertZone = document.getElementById('alertZone');
 
-    player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
+
 
     if (p2Wins) {
         alertZone.textContent = 'Player 2 Won!'
@@ -173,9 +173,12 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
 })
 
 myConnectionsRef.child('playerTwo').child('losses').on('value', (snap) => {
-    const player2LossesDiv = document.getElementById('player2Wins');
+    const player2LossesDiv = document.getElementById('player2Losses');
     let p2Losses = snap.val()
-    player2LossesDiv.textContent = 'Player 2 Losses: ' + p2Losses;
+    if (p2Losses) {
+        player2LossesDiv.textContent = 'Player 2 Losses: ' + p2Losses;
+    }
+    
 })
 
 myConnectionsRef.child('playerTwo').child('choice').on('value', (snap) => {
@@ -205,8 +208,9 @@ const sendBtn = document.getElementById('sendMessage');
 const messageBox = document.getElementById('message');
 const chatBox = document.getElementById('chat');
 
-sendBtn.addEventListener('click', () => {
- if (player) {
+sendBtn.addEventListener('click', (e) => {
+ e.preventDefault();
+    if (player) {
 
     
     let message = messageBox.value;
