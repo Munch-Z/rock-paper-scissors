@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    position: relative;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: black;
+    color: white;
+}
+
+.container {
+    margin: 0 auto;
+    text-align: center;
+}
+
+div > button {
+    font-size: 52px;
+    margin: 10px 10px;
+    color: white;
+    background-color: black;
+    border: none;
+}
+
+div > p {
+    padding: 5px;
+
+}
+
+#picks {
+    margin: 3%;
+}
+
+#chat {
+    max-width: 500px;
+    height: 350px;
+    overflow-y: scroll;
+    margin: 0 auto;
+    text-align: left;
+}

@@ -5,38 +5,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://kit.fontawesome.com/e51bc51926.js"></script>
+    <link rel="stylesheet" type="text/css" href="assets/css/styles.css">
     <title>Rock Paper Scissors Game</title>
 </head>
 
 <body>
-    <header>
-        <h1>Rock Paper Scissors!</h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Rock Paper Scissors!</h1>
+        </header>
 
-    <div id="selections">
-        <button id="rock">Rock</button>
-        <button id="paper">Paper</button>
-        <button id="scissors">Scissors</button></div>
-    <p id="player1"></p>
-    <p id="player2"></p>
+        <h2>Click a symbol below to make your pick!</h2>
+        <div id="selections">
+            <button data-type="rock"><i data-type="rock" class="fas fa-hand-rock"></i></button>
+            <button data-type="paper"><i data-type="paper" class="fas fa-hand-paper"></i></button>
+            <button data-type="scissors"><i data-type="scissors" class="fas fa-hand-scissors"></i></button>
+        </div>
 
-    <div id="scores">
-        <p id="alertZone"></p>
-        <p id="player1Wins">Player 1 Wins: </p>
-        <p id="player1Losses">Player 1 Losses: </p>
-        <p id="player2Wins">Player 2 Wins: </p>
-        <p id="player2Losses">Player 2 Losses: </p>
-        <p id="ties">Ties: </p>
+        <div id="picks">
+            <p id="player1"></p>
+            <p id="player2"></p>
+        </div>
+
+        <div id="scores">
+            <p id="alertZone"></p>
+            <p id="player1Wins">Player 1 Wins: </p>
+            <p id="player1Losses">Player 1 Losses: </p>
+            <p id="player2Wins">Player 2 Wins: </p>
+            <p id="player2Losses">Player 2 Losses: </p>
+            <p id="ties">Ties: </p>
+        </div>
+        <h2>Chat here!</h2>
+        <div id="chat">
+
+        </div>
+        <form>
+            <input id="message" type="text" placeholder="Enter message here...">
+            <button id="sendMessage">Send</button>
+        </form>
     </div>
-
-    <div id="chat">
-
-    </div>
-    <form>
-    <input id="message" type="text" placeholder="Enter message here...">
-    <button id="sendMessage">Send</button>
-    </form>
-    
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-messaging.js"></script>
     <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-database.js"></script>

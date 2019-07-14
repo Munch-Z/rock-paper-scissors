@@ -15,9 +15,7 @@ const firebaseConfig = {
 
 const selectionsDiv = document.getElementById('selections');
 
-//test is a placeholder string because firebase is dumb and doesn't let me check for paths that are empty strings
-
-const name = prompt('What is your name, adventurer?')
+// const name = prompt('What is your name, adventurer?')
 
 firebase.initializeApp(firebaseConfig);
 
@@ -70,7 +68,8 @@ connectedRef.on('value', (snap) => {
 
 selectionsDiv.addEventListener('click', (e) => {
   if (player) {  
-    const playerPicked = e.target.id;
+    
+    const playerPicked = e.target.dataset.type;
 
     myConnectionsRef.once('value').then((snap) => {
         if (snap.child('playerOne').exists() && snap.child('playerTwo').exists()) {
@@ -99,7 +98,6 @@ function checkPicks() {
 
         if (p1Pick && p2Pick) {
 
-
             if (p1Pick === p2Pick) {
                 p1Ties++;
                 myConnectionsRef.child('playerOne').child('ties').set(p1Ties);
@@ -126,7 +124,19 @@ function checkPicks() {
     })
 }
 
+myConnectionsRef.on('value', (snap) => {
+    const player1PickDiv = document.getElementById('player1');
+    const player2PickDiv = document.getElementById('player2'); 
 
+    let p1Pick = snap.child('playerOne').child('choice').val();
+    let p2Pick = snap.child('playerTwo').child('choice').val();
+
+    if (p1Pick && p2Pick){
+        player1PickDiv.textContent = 'Player 1 picked: ' + p1Pick.toUpperCase();
+        player2PickDiv.textContent = 'Player 2 picked: ' + p2Pick.toUpperCase();
+    }
+
+})
 
 //playerOne listeners
 myConnectionsRef.child('playerOne').child('wins').on('value', (snap) => {
@@ -136,7 +146,7 @@ myConnectionsRef.child('playerOne').child('wins').on('value', (snap) => {
 
     player1WinsDiv.textContent = 'Player 1 Wins: ' + p1Wins;
     if (p1Wins > 0) {
-        alertZone.textContent = 'Player 1 Won!'
+        alertZone.textContent = 'The last round Player 1 Won!'
     }
 })
 
@@ -144,15 +154,6 @@ myConnectionsRef.child('playerOne').child('losses').on('value', (snap) => {
     const player1LossesDiv = document.getElementById('player1Losses');
     let p1Losses = snap.val()
     player1LossesDiv.textContent = 'Player 1 Losses: ' + p1Losses;
-})
-
-myConnectionsRef.child('playerOne').child('choice').on('value', (snap) => {
-    let pick = snap.val();
-    const player1PickDiv = document.getElementById('player1');
-    if (pick) {
-        player1PickDiv.textContent = 'Player 1 picked: ' + pick.toUpperCase();
-    }
-
 })
 
 
@@ -163,10 +164,11 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
     const player2WinsDiv = document.getElementById('player2Wins');
     const alertZone = document.getElementById('alertZone');
 
-
-
     if (p2Wins) {
-        alertZone.textContent = 'Player 2 Won!'
+        alertZone.textContent = 'The last round Player 2 Won!'
+    }
+
+    if (p2Wins !== null){
         player2WinsDiv.textContent = 'Player 2 Wins: ' + p2Wins;
     }
 
@@ -175,19 +177,13 @@ myConnectionsRef.child('playerTwo').child('wins').on('value', (snap) => {
 myConnectionsRef.child('playerTwo').child('losses').on('value', (snap) => {
     const player2LossesDiv = document.getElementById('player2Losses');
     let p2Losses = snap.val()
-    if (p2Losses) {
+    
+    if (p2Losses !== null) {
         player2LossesDiv.textContent = 'Player 2 Losses: ' + p2Losses;
     }
+
+
     
-})
-
-myConnectionsRef.child('playerTwo').child('choice').on('value', (snap) => {
-    const player2PickDiv = document.getElementById('player2');
-    let pick = snap.val();
-    if (pick) {
-        player2PickDiv.textContent = 'Player 2 picked: ' + pick.toUpperCase();
-    }
-
 })
 
 //Ties
@@ -198,7 +194,7 @@ myConnectionsRef.child('playerOne').child('ties').on('value', (snap) => {
 
     tiesDiv.textContent = 'Ties: ' + ties;
     if (ties > 0) {
-        alertZone.textContent = 'It\'s a tie!';
+        alertZone.textContent = 'The last round was a tie!';
     }
 })
 
