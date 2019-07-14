@@ -15,7 +15,7 @@ const firebaseConfig = {
 
 const selectionsDiv = document.getElementById('selections');
 
-// const name = prompt('What is your name, adventurer?')
+const name = prompt('What is your name, adventurer?')
 
 firebase.initializeApp(firebaseConfig);
 
